@@ -57,6 +57,60 @@ async function getCategories() {
 }
 getCategories()
 
+
+// modal functionalities
+const cardModal = document.querySelector('.card-detail-modal')
+const overlay = document.getElementById('treeModal');
+
+async function openModal(plantId) {
+    cardModal.innerHTML = ''
+    cardModal.innerHTML = `      
+    <div id="tree-loader" class="loader">
+            <div class="bar1"></div>
+            <div class="bar2"></div>
+            <div class="bar3"></div>
+            <div class="bar4"></div>
+            <div class="bar5"></div>
+            <div class="bar6"></div>
+            <div class="bar7"></div>
+            <div class="bar8"></div>
+            <div class="bar9"></div>
+            <div class="bar10"></div>
+            <div class="bar11"></div>
+            <div class="bar12"></div>
+        </div>`
+    document.body.classList.add('modal-open');
+    overlay.classList.add('show');
+    document.querySelector('.card-detail-modal').focus();
+    let res = await fetch(`https://openapi.programming-hero.com/api/plant/${plantId}`)
+    let data = await res.json()
+    console.log(data.plants)
+    
+    cardModal.innerHTML = `
+        <button class="modal-close-btn" id="closeModal" aria-label="Close">×</button>
+            <h2 id="treeTitle" class="tree-name-modal">${data.plants.name}</h2>
+            <img src="${data.plants.image}" alt="Mango Mishti" class="modal-tree-img">
+            <div class="tree-details-modal">
+              <p class="modal-detail"><strong>Category:</strong> ${data.plants.category}</p>
+              <p class="modal-detail"><strong>Price:</strong> ৳${data.plants.price}</p>
+              <p class="modal-detail"><strong>Description:</strong>${data.plants.description}</p>
+            </div>
+    `
+    const closeBtn = document.getElementById('closeModal');
+    closeBtn.addEventListener('click', closeModal);
+    overlay.addEventListener('click', (e) => {
+        if (e.target === overlay) closeModal();
+    });
+
+}
+
+function closeModal() {
+    overlay.classList.remove('show');
+    document.body.classList.remove('modal-open');
+}
+document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeModal(); });
+
+
 // show all plants
 const treeCardContainer = document.querySelector('.three-center-container')
 const treeLoaderAnimation = document.querySelector('#tree-loader')
@@ -64,10 +118,10 @@ const treeLoaderAnimation = document.querySelector('#tree-loader')
 async function showAllPlants() {
     let res = await fetch(`https://openapi.programming-hero.com/api/plants`)
     let receivedData = await res.json()
-    console.log(receivedData)
     receivedData.plants.forEach((plantObj)=>{
         let treeCard = document.createElement('div')
         treeCard.classList.add('tree-card')
+        treeCard.setAttribute('value', plantObj.id)
         treeCard.innerHTML = `
             <img loading="lazy" src="${plantObj.image}" alt="" class="card-image">
                 <div class="card-details">
@@ -83,26 +137,15 @@ async function showAllPlants() {
     treeCardContainer.appendChild(treeCard)
     })
     treeLoaderAnimation.style.display = 'none'
+    let treeCards = document.querySelectorAll('.tree-card')
+    treeCards.forEach((treeCard)=>{
+        treeCard.addEventListener('click' , async (e)=>{
+            if(!e.target.classList.contains('add-card')){
+                await openModal(treeCard.getAttribute('value'))
+            } else {
+                console.log(`add to cart button clicked`)
+            }
+        })
+    })
 }
 showAllPlants()
-
-
-const overlay = document.getElementById('treeModal');
-const closeBtn = document.getElementById('closeModal');
-
-function openModal() {
-  document.body.classList.add('modal-open');
-  overlay.classList.add('show');
-  document.querySelector('.card-detail-modal').focus();
-}
-
-function closeModal() {
-  overlay.classList.remove('show');
-  document.body.classList.remove('modal-open');
-}
-
-closeBtn.addEventListener('click', closeModal);
-overlay.addEventListener('click', (e) => {
-  if (e.target === overlay) closeModal();
-});
-document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeModal(); });

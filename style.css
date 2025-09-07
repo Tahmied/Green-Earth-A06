@@ -1237,6 +1237,7 @@ body.no-scroll {
   border-radius: 10px;
   object-fit: cover;
   margin-bottom: 1.25rem;
+  max-width: 200px;
 }
 
 .tree-details-modal {
