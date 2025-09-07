@@ -39,6 +39,7 @@
 
 // add categories
 const categoryContainer = document.querySelector('.categories-container')
+const loaderCategory = document.querySelector('.loader')
 
 async function getCategories() {
     let res = await fetch(`https://openapi.programming-hero.com/api/categories`)
@@ -53,5 +54,6 @@ async function getCategories() {
 
         categoryContainer.appendChild(categoryItem)
     })
+    loaderCategory.style.display = 'none'
 }
 getCategories()
