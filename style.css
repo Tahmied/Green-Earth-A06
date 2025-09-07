@@ -932,3 +932,134 @@ body.no-scroll {
         font-size: 32px;
     }
 }
+
+/* section six */
+
+.six {
+    background-color:#176535; 
+    padding: 80px 20px;
+}
+
+.six-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    text-align: center;
+}
+
+.six-title {
+    font-family: 'Inter';
+    font-style: normal;
+    font-weight: 600;
+    font-size: 32px;
+    text-align: center;
+    color: #FFFFFF;
+    margin-bottom: 40px; 
+}
+
+.form-wrapper {
+    background-color:#15803D;
+    border-radius: 16px;
+    padding: 40px;
+    max-width: 500px;
+    margin: 0 auto;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+}
+
+.form-wrapper input[type="text"],
+.form-wrapper input[type="email"] {
+    width: 100%;
+    padding: 14px 16px;
+    margin-bottom: 16px;
+    border: none;
+    border-radius: 8px;
+    font-size: 16px;
+    background-color: #FFFFFF;
+    color: #374151;
+    box-sizing: border-box; 
+}
+
+.form-wrapper input::placeholder {
+    color: #9CA3AF;
+}
+
+.select-wrapper {
+    position: relative;
+    width: 100%;
+    margin-bottom: 24px; 
+}
+
+.form-wrapper select {
+    width: 100%;
+    padding: 14px 16px;
+    border: none;
+    border-radius: 8px;
+    font-size: 16px;
+    background-color: #FFFFFF;
+    color: #374151;
+    -webkit-appearance: none; 
+    -moz-appearance: none; 
+    appearance: none; 
+    cursor: pointer;
+}
+
+.select-wrapper::after {
+    content: '▼';
+    font-size: 12px;
+    color: #6B7280;
+    position: absolute;
+    right: 16px;
+    top: 50%;
+    transform: translateY(-50%);
+    pointer-events: none; 
+}
+
+.donate-button {
+    width: 100%;
+    padding: 14px 20px;
+    background-color: #FACC15;
+    color: #1F2937; 
+    border: none;
+    border-radius: 999px; 
+    font-size: 18px;
+    font-weight: 600;
+    cursor: pointer;
+    font-family: 'Inter';
+    font-style: normal;
+    font-weight: 500;
+    font-size: 16px;
+    color: #15803D;
+}
+
+.donate-button:hover {
+    filter: brightness(1.02);
+    transform: scale(1.02);
+}
+
+.last-section {
+    align-content: center;
+    background-color: #14532D;
+}
+
+.last-text {
+    font-family: 'Inter';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 16px;
+    text-align: center;
+    color: #FFFFFF;
+    margin: 2rem;
+}
+
+@media (max-width: 540px) {
+    .six {
+        padding: 60px 15px;
+    }
+
+    .six-title {
+        font-size: 28px;
+    }
+
+    .form-wrapper {
+        padding: 30px 25px;
+    }
+}
