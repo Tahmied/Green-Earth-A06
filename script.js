@@ -45,7 +45,6 @@ async function getCategories() {
     let res = await fetch(`https://openapi.programming-hero.com/api/categories`)
     let data = await res.json()
     let categories = data.categories
-    console.log(categories)
     categories.forEach((categoryObj)=>{
         //create a category item div
         let categoryItem = document.createElement('div')
@@ -57,3 +56,34 @@ async function getCategories() {
     loaderCategory.style.display = 'none'
 }
 getCategories()
+
+// show all plants
+const treeCardContainer = document.querySelector('.three-center')
+
+async function showAllPlants() {
+    let res = await fetch(`https://openapi.programming-hero.com/api/plants`)
+    let receivedData = await res.json()
+    console.log(receivedData)
+    receivedData.plants.forEach((plantObj)=>{
+        console.log(plantObj)
+        //
+        let treeCard = document.createElement('div')
+        treeCard.classList.add('tree-card')
+        treeCard.innerHTML = `
+            <img src="${plantObj.image}" alt="" class="card-image">
+                <div class="card-details">
+                    <p class="tree-title">${plantObj.name}</p>
+                    <p class="tree-descrition">${plantObj.description}</p>
+                    <div class="tree-catp">
+                        <div class="tree-category">${plantObj.category}</div>
+                        <p class="tree-price">৳${plantObj.price}</p>
+                    </div>
+                    <button value="${plantObj.id}" class="add-card">Add to Cart</button>
+                </div>
+        `
+    treeCardContainer.appendChild(treeCard)
+    })
+
+
+}
+showAllPlants()
