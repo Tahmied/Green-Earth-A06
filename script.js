@@ -1,3 +1,4 @@
+//  header hamburger functionality
  (function(){
     const burgerCheckbox = document.getElementById('burger');
     const mobileMenu = document.querySelector('.mobile-menu');
@@ -35,3 +36,22 @@
       if (e.key === 'Escape') closeMenu();
     });
   })();
+
+// add categories
+const categoryContainer = document.querySelector('.categories-container')
+
+async function getCategories() {
+    let res = await fetch(`https://openapi.programming-hero.com/api/categories`)
+    let data = await res.json()
+    let categories = data.categories
+    console.log(categories)
+    categories.forEach((categoryObj)=>{
+        //create a category item div
+        let categoryItem = document.createElement('div')
+        categoryItem.classList.add('category-item')
+        categoryItem.innerHTML = categoryObj.category_name
+
+        categoryContainer.appendChild(categoryItem)
+    })
+}
+getCategories()

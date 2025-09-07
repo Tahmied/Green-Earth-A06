@@ -111,6 +111,7 @@ a {
   background: transparent;
   cursor: pointer;
   display: block;
+  scale: 0.6;
 }
 
 .burger input {
@@ -466,6 +467,21 @@ body.no-scroll {
     font-size: 16px;
     color: #1F2937;
     width: 100%;
+    cursor: pointer;
+}
+
+.category-item:hover {
+    padding: 8px 10px;
+    gap: 10px;
+    background: #15803D;
+    border-radius: 4px;
+    font-family: 'Inter';
+    font-style: normal;
+    font-weight: 500;
+    font-size: 16px;
+    color: #FFFFFF;
+    position: relative;
+    left: -10px;
 }
 
 .active-cate {
@@ -658,6 +674,7 @@ body.no-scroll {
 
 .cross-icon {
     color: #8C8C8C;
+    cursor: pointer;
 }
 
 .cart-total {
