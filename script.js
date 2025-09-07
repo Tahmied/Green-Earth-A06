@@ -39,7 +39,7 @@
 
 // add categories
 const categoryContainer = document.querySelector('.categories-container')
-const loaderCategory = document.querySelector('.loader')
+const loaderCategory = document.querySelector('#category-loader')
 
 async function getCategories() {
     let res = await fetch(`https://openapi.programming-hero.com/api/categories`)
@@ -58,19 +58,18 @@ async function getCategories() {
 getCategories()
 
 // show all plants
-const treeCardContainer = document.querySelector('.three-center')
+const treeCardContainer = document.querySelector('.three-center-container')
+const treeLoaderAnimation = document.querySelector('#tree-loader')
 
 async function showAllPlants() {
     let res = await fetch(`https://openapi.programming-hero.com/api/plants`)
     let receivedData = await res.json()
     console.log(receivedData)
     receivedData.plants.forEach((plantObj)=>{
-        console.log(plantObj)
-        //
         let treeCard = document.createElement('div')
         treeCard.classList.add('tree-card')
         treeCard.innerHTML = `
-            <img src="${plantObj.image}" alt="" class="card-image">
+            <img loading="lazy" src="${plantObj.image}" alt="" class="card-image">
                 <div class="card-details">
                     <p class="tree-title">${plantObj.name}</p>
                     <p class="tree-descrition">${plantObj.description}</p>
@@ -83,7 +82,6 @@ async function showAllPlants() {
         `
     treeCardContainer.appendChild(treeCard)
     })
-
-
+    treeLoaderAnimation.style.display = 'none'
 }
 showAllPlants()
