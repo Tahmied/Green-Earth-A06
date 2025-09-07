@@ -1180,3 +1180,106 @@ body.no-scroll {
   transform: rotate(330deg) translate(0, -130%);
   animation-delay: -0.1s;
 }
+
+/* modal */
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.55);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 2147483647;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 240ms ease, visibility 240ms ease;
+}
+
+.modal-overlay.show {
+  opacity: 1;
+  visibility: visible;
+}
+
+.card-detail-modal {
+  background: #ffffff;
+  border-radius: 15px;
+  padding: 24px;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 90%;
+  max-width: 500px;
+  max-height: calc(100vh - 64px);
+  overflow: auto;
+  position: relative;
+  transform: scale(0.95);
+  opacity: 0;
+  transition: transform 240ms cubic-bezier(.2,.9,.28,1), opacity 240ms ease;
+}
+
+.modal-overlay.show .card-detail-modal {
+  transform: scale(1);
+  opacity: 1;
+}
+
+.tree-name-modal {
+  font-size: 1.5rem;
+  font-weight: 700;
+  text-align: center;
+  margin: 0 0 1rem 0;
+  color: #333;
+}
+
+.modal-tree-img {
+  width: 100%;
+  height: auto;
+  border-radius: 10px;
+  object-fit: cover;
+  margin-bottom: 1.25rem;
+}
+
+.tree-details-modal {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  color: #555;
+  line-height: 1.5;
+}
+
+.modal-detail {
+  font-size: 1rem;
+  margin: 0;
+}
+
+.modal-close-btn {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  border: 0;
+  background: transparent;
+  cursor: pointer;
+  padding: 6px;
+  font-size: 1.4rem;
+  color: #888;
+  border-radius: 6px;
+}
+
+.modal-close-btn:hover,
+.modal-close-btn:focus {
+  color: #333;
+  background: rgba(0,0,0,0.04);
+}
+
+body.modal-open {
+  overflow: hidden;
+}
+
+@media (min-width: 640px) {
+  .card-detail-modal { width: 80%; max-width: 640px; }
+}
+
+@media (min-width: 1024px) {
+  .card-detail-modal { width: 60%; max-width: 720px; }
+}

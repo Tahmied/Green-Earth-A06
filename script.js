@@ -85,3 +85,24 @@ async function showAllPlants() {
     treeLoaderAnimation.style.display = 'none'
 }
 showAllPlants()
+
+
+const overlay = document.getElementById('treeModal');
+const closeBtn = document.getElementById('closeModal');
+
+function openModal() {
+  document.body.classList.add('modal-open');
+  overlay.classList.add('show');
+  document.querySelector('.card-detail-modal').focus();
+}
+
+function closeModal() {
+  overlay.classList.remove('show');
+  document.body.classList.remove('modal-open');
+}
+
+closeBtn.addEventListener('click', closeModal);
+overlay.addEventListener('click', (e) => {
+  if (e.target === overlay) closeModal();
+});
+document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeModal(); });
