@@ -688,6 +688,15 @@ body.no-scroll {
     opacity: 0.5;
 }
 
+.no-items-in-cart {
+    font-style: normal;
+    font-weight: 400;
+    font-size: 16px;
+    color: #1F2937;
+    opacity: 0.5;
+    padding: 1rem;
+}
+
 .cross-icon {
     color: #8C8C8C;
     cursor: pointer;

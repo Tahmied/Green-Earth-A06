@@ -118,6 +118,31 @@ const cartContainer = document.querySelector('.myCart')
 let totalCart =0;
 let cartItems = []
 
+function addToCart(treeCard){
+    cartContainer.innerHTML = ''
+    cartItems.forEach((cartItemArr)=>{
+        let cartItem = document.createElement('div')
+        cartItem.classList.add('cart-item')
+        cartItem.setAttribute('value',treeCard.getAttribute('value'))
+        cartItem.innerHTML = `
+            <div class="cart-item-left">
+                <p class="cart-item-title">${cartItemArr.treeName}</p>
+                <p class="cart-item-price">${cartItemArr.treePrice} x ${cartItemArr.treeQant}</p>
+            </div>
+            <div class="cross-icon">
+                <img src="./assets/cross.svg" alt="" class="cross-icon">
+            </div>
+        `
+        // append to cart container
+        cartContainer.appendChild(cartItem)
+        // update the price of the total 
+        const totalPriceShow = document.querySelector('.total-price')
+        totalPriceShow.innerHTML = `৳${parseInt(totalCart)}`
+        // cross button functionality ( remove from cart )
+        // remove the item from array, refresh the card container
+    })
+}
+
 async function showAllPlants() {
     let res = await fetch(`https://openapi.programming-hero.com/api/plants`)
     let receivedData = await res.json()
@@ -141,6 +166,8 @@ async function showAllPlants() {
     })
     treeLoaderAnimation.style.display = 'none'
     let treeCards = document.querySelectorAll('.tree-card')
+
+    // add to cart functionality
     treeCards.forEach((treeCard)=>{
         treeCard.addEventListener('click' , async (e)=>{
             if(!e.target.classList.contains('add-card')){
@@ -153,40 +180,17 @@ async function showAllPlants() {
                 let existingItem = cartItems.find((e)=>{
                     return e.treeName === treeName
                 })
-                
                 if(!existingItem){
                     cartItems.push({
                         treeName : treeName,
                         treePrice : treePrice,
                         treeQant : 1
                     })
-                    
                 } else {
                     existingItem.treeQant ++
                 }
-
                 // create a cart element from that array
-                console.log(cartItems)
-                cartContainer.innerHTML = ''
-                cartItems.forEach((cartItemArr)=>{
-                    let cartItem = document.createElement('div')
-                    cartItem.classList.add('cart-item')
-                    cartItem.setAttribute('value',treeCard.getAttribute('value'))
-                    cartItem.innerHTML = `
-                        <div class="cart-item-left">
-                            <p class="cart-item-title">${cartItemArr.treeName}</p>
-                            <p class="cart-item-price">${cartItemArr.treePrice} x ${cartItemArr.treeQant}</p>
-                        </div>
-                        <div class="cross-icon">
-                            <img src="./assets/cross.svg" alt="" class="cross-icon">
-                        </div>
-                    `
-                    // append to cart container
-                    cartContainer.appendChild(cartItem)
-                    // update the price of the total 
-                    const totalPriceShow = document.querySelector('.total-price')
-                    totalPriceShow.innerHTML = `৳${parseInt(totalCart)}`
-                })
+                addToCart(treeCard)
             }
         })
     })
