@@ -110,13 +110,90 @@ function closeModal() {
 }
 document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeModal(); });
 
-
 // show all plants
 const treeCardContainer = document.querySelector('.three-center-container')
 const treeLoaderAnimation = document.querySelector('#tree-loader')
 const cartContainer = document.querySelector('.myCart')
 let totalCart =0;
 let cartItems = []
+
+function extractPriceNumber(priceText) {
+  const digits = priceText.replace('৳', '');
+  return parseInt(digits, 10) || 0;
+}
+
+function formatPrice(num) {
+  return `৳${num}`;
+}
+
+function renderCart() {
+  cartContainer.innerHTML = '';
+
+  cartItems.forEach((item) => {
+    const cartItem = document.createElement('div');
+    cartItem.classList.add('cart-item');
+    cartItem.dataset.value = item.value;
+
+    cartItem.innerHTML = `
+      <div class="cart-item-left">
+        <p class="cart-item-title">${item.treeName}</p>
+        <p class="cart-item-price">${formatPrice(item.priceNum)} x ${item.treeQant}</p>
+      </div>
+      <div class="cross-icon" role="button" aria-label="Remove item">
+        <img src="./assets/cross.svg" alt="remove">
+      </div>
+    `;
+    cartContainer.appendChild(cartItem);
+
+    // add event listener only to that cart item cross-icon 
+    const cross = cartItem.querySelector('.cross-icon');
+    cross.addEventListener('click', () => {
+      // reduce the quantity of that tree in the array
+      const idx = cartItems.findIndex(ci => ci.value === item.value);
+      if (idx === -1) return;
+
+      // reduce the quantity of that cart item
+      totalCart = Math.max(0, totalCart - cartItems[idx].priceNum);
+      cartItems[idx].treeQant -= 1;
+
+      // remove from array object if quantity reaches 0
+      if (cartItems[idx].treeQant <= 0) {
+        cartItems.splice(idx, 1);
+      }
+      renderCart(); 
+    });
+  });
+
+  // update total number txt
+  const totalPriceShow = document.querySelector('.total-price');
+  if (totalPriceShow) {
+    totalPriceShow.innerHTML = formatPrice(totalCart);
+  } 
+}
+
+function addItemToCartFromCard(treeCard) {
+  const id = treeCard.getAttribute('value');
+  const treeName = treeCard.querySelector('.tree-title').innerText;
+  const treePriceText = treeCard.querySelector('.tree-price').innerText || '';
+  const priceNum = extractPriceNumber(treePriceText);
+
+  totalCart += priceNum;
+
+  const existing = cartItems.find(ci => ci.value === id);
+  if (!existing) {
+    cartItems.push({
+      treeName,
+      treePriceText, 
+      priceNum,
+      treeQant: 1,
+      value: id
+    });
+  } else {
+    existing.treeQant += 1;
+  }
+  renderCart();
+}
+
 
 function addToCart(treeCard){
     cartContainer.innerHTML = ''
@@ -145,19 +222,22 @@ function addToCart(treeCard){
                 } else {
                     cartItemToRemove = e.target.parentElement.parentElement
                 }
+                let cartItemInArrayToRemove = cartItems.find((item)=>{
+                    return item.value == cartItemToRemove.getAttribute('value')
+                })
+                totalCart = totalCart-(parseInt(extractPriceNumber(cartItemInArrayToRemove.treePrice))*cartItemInArrayToRemove.treeQant)
 
                 let index = cartItems.findIndex(
                   (item) => item.value === cartItemToRemove.getAttribute('value')
-                );
-
-                console.log(index)
+                )
                 if (index !== -1) {
-                  totalCart -=
-                    parseInt(cartItems[index].treePrice.replace('৳', '')) *
-                    cartItems[index].treeQant;
+                  totalCart -= parseInt( extractPriceNumber(cartItems[index].treePrice)) * cartItems[index].treeQant;
                   cartItems.splice(index, 1);
                 }
+                const totalPriceShow = document.querySelector('.total-price')
+                totalPriceShow.innerHTML = `৳${parseInt(totalCart)}`
                 cartItemToRemove.remove();
+                
             })
         })
 
@@ -197,25 +277,7 @@ async function showAllPlants() {
             if(!e.target.classList.contains('add-card')){
                 await openModal(treeCard.getAttribute('value'))
             } else {
-                const treeName = treeCard.querySelector(".tree-title").innerText;
-                const treePrice = treeCard.querySelector(".tree-price").innerText;
-                totalCart += parseInt(treePrice.replace('৳',''))
-                // check if its already added
-                let existingItem = cartItems.find((e)=>{
-                    return e.treeName === treeName
-                })
-                if(!existingItem){
-                    cartItems.push({
-                        treeName : treeName,
-                        treePrice : treePrice,
-                        treeQant : 1,
-                        value : treeCard.getAttribute('value')
-                    })
-                } else {
-                    existingItem.treeQant ++
-                }
-                // create a cart element from that array
-                addToCart(treeCard)
+                addItemToCartFromCard(treeCard)
             }
         })
     })
