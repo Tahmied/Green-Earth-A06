@@ -128,6 +128,13 @@ function formatPrice(num) {
 
 function renderCart() {
   cartContainer.innerHTML = '';
+  console.log(cartItems)
+  if(cartItems.length === 0) {
+    let noItemNotice = document.createElement('p')
+    noItemNotice.classList.add('no-items-in-cart')
+    noItemNotice.innerHTML = 'No Items In Your Cart'
+    cartContainer.appendChild(noItemNotice)
+  }
 
   cartItems.forEach((item) => {
     const cartItem = document.createElement('div');
@@ -194,58 +201,6 @@ function addItemToCartFromCard(treeCard) {
   renderCart();
 }
 
-
-function addToCart(treeCard){
-    cartContainer.innerHTML = ''
-    cartItems.forEach((cartItemArr)=>{
-        let cartItem = document.createElement('div')
-        cartItem.classList.add('cart-item')
-        cartItem.setAttribute('value',treeCard.getAttribute('value'))
-        cartItem.innerHTML = `
-            <div class="cart-item-left">
-                <p class="cart-item-title">${cartItemArr.treeName}</p>
-                <p class="cart-item-price">${cartItemArr.treePrice} x ${cartItemArr.treeQant}</p>
-            </div>
-            <div class="cross-icon">
-                <img src="./assets/cross.svg" alt="">
-            </div>
-        `
-        // append to cart container
-        cartContainer.appendChild(cartItem)
-        // cross button functionality ( remove from cart )
-        const crossBtn = document.querySelectorAll('.cross-icon')
-        crossBtn.forEach((cross)=>{
-            let cartItemToRemove;
-            cross.addEventListener('click',(e)=>{
-                if(e.target.classList.contains('cross-icon')){
-                    cartItemToRemove = e.target.parentElement
-                } else {
-                    cartItemToRemove = e.target.parentElement.parentElement
-                }
-                let cartItemInArrayToRemove = cartItems.find((item)=>{
-                    return item.value == cartItemToRemove.getAttribute('value')
-                })
-                totalCart = totalCart-(parseInt(extractPriceNumber(cartItemInArrayToRemove.treePrice))*cartItemInArrayToRemove.treeQant)
-
-                let index = cartItems.findIndex(
-                  (item) => item.value === cartItemToRemove.getAttribute('value')
-                )
-                if (index !== -1) {
-                  totalCart -= parseInt( extractPriceNumber(cartItems[index].treePrice)) * cartItems[index].treeQant;
-                  cartItems.splice(index, 1);
-                }
-                const totalPriceShow = document.querySelector('.total-price')
-                totalPriceShow.innerHTML = `৳${parseInt(totalCart)}`
-                cartItemToRemove.remove();
-                
-            })
-        })
-
-        // update the price of the total 
-        const totalPriceShow = document.querySelector('.total-price')
-        totalPriceShow.innerHTML = `৳${parseInt(totalCart)}`
-    })
-}
 
 async function showAllPlants() {
     let res = await fetch(`https://openapi.programming-hero.com/api/plants`)
