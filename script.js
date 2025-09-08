@@ -130,16 +130,40 @@ function addToCart(treeCard){
                 <p class="cart-item-price">${cartItemArr.treePrice} x ${cartItemArr.treeQant}</p>
             </div>
             <div class="cross-icon">
-                <img src="./assets/cross.svg" alt="" class="cross-icon">
+                <img src="./assets/cross.svg" alt="">
             </div>
         `
         // append to cart container
         cartContainer.appendChild(cartItem)
+        // cross button functionality ( remove from cart )
+        const crossBtn = document.querySelectorAll('.cross-icon')
+        crossBtn.forEach((cross)=>{
+            let cartItemToRemove;
+            cross.addEventListener('click',(e)=>{
+                if(e.target.classList.contains('cross-icon')){
+                    cartItemToRemove = e.target.parentElement
+                } else {
+                    cartItemToRemove = e.target.parentElement.parentElement
+                }
+
+                let index = cartItems.findIndex(
+                  (item) => item.value === cartItemToRemove.getAttribute('value')
+                );
+
+                console.log(index)
+                if (index !== -1) {
+                  totalCart -=
+                    parseInt(cartItems[index].treePrice.replace('৳', '')) *
+                    cartItems[index].treeQant;
+                  cartItems.splice(index, 1);
+                }
+                cartItemToRemove.remove();
+            })
+        })
+
         // update the price of the total 
         const totalPriceShow = document.querySelector('.total-price')
         totalPriceShow.innerHTML = `৳${parseInt(totalCart)}`
-        // cross button functionality ( remove from cart )
-        // remove the item from array, refresh the card container
     })
 }
 
@@ -184,7 +208,8 @@ async function showAllPlants() {
                     cartItems.push({
                         treeName : treeName,
                         treePrice : treePrice,
-                        treeQant : 1
+                        treeQant : 1,
+                        value : treeCard.getAttribute('value')
                     })
                 } else {
                     existingItem.treeQant ++
