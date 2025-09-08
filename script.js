@@ -114,8 +114,14 @@ document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeModal
 // show all plants
 const treeCardContainer = document.querySelector('.three-center-container')
 const treeLoaderAnimation = document.querySelector('#tree-loader')
+const cartContainer = document.querySelector('.myCart')
+let totalCart =0;
+let cartItems = []
 
 async function showAllPlants() {
+    let selectedTreeName = ''
+    let selectedTreePrice = ''
+    let selectedTreeQuantity =''
     let res = await fetch(`https://openapi.programming-hero.com/api/plants`)
     let receivedData = await res.json()
     receivedData.plants.forEach((plantObj)=>{
@@ -143,7 +149,46 @@ async function showAllPlants() {
             if(!e.target.classList.contains('add-card')){
                 await openModal(treeCard.getAttribute('value'))
             } else {
-                console.log(`add to cart button clicked`)
+                const treeName = treeCard.querySelector(".tree-title").innerText;
+                const treePrice = treeCard.querySelector(".tree-price").innerText;
+                totalCart += parseInt(treePrice.replace('৳',''))
+                // check if its already added
+                let existingItem = cartItems.find((e)=>{
+                    return e.treeName === treeName
+                })
+                console.log(existingItem, cartItems)
+                if(!existingItem){
+                    console.log(`existing item not found pushing ${treeName}`)
+                    cartItems.push({
+                        treeName : treeName,
+                        treePrice : treePrice,
+                        treeQant : 0
+                    })
+                    console.log(cartItems)
+                } else {
+                    existingItem.treeQant ++
+                }
+                // create a cart element
+            
+                
+                
+                let cartItem = document.createElement('div')
+                cartItem.classList.add('cart-item')
+                cartItem.setAttribute('value',treeCard.getAttribute('value'))
+                cartItem.innerHTML = `
+                    <div class="cart-item-left">
+                        <p class="cart-item-title">${treeName}</p>
+                        <p class="cart-item-price">${treePrice} x 1</p>
+                    </div>
+                    <div class="cross-icon">
+                        <img src="./assets/cross.svg" alt="" class="cross-icon">
+                    </div>
+                `
+                // append to cart container
+                cartContainer.appendChild(cartItem)
+                // update the price of the total 
+                const totalPriceShow = document.querySelector('.total-price')
+                totalPriceShow.innerHTML = `৳${parseInt(totalCart)}`
             }
         })
     })
