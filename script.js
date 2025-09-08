@@ -84,7 +84,7 @@ async function openModal(plantId) {
     document.querySelector('.card-detail-modal').focus();
     let res = await fetch(`https://openapi.programming-hero.com/api/plant/${plantId}`)
     let data = await res.json()
-    console.log(data.plants)
+    
     
     cardModal.innerHTML = `
         <button class="modal-close-btn" id="closeModal" aria-label="Close">×</button>
@@ -119,9 +119,6 @@ let totalCart =0;
 let cartItems = []
 
 async function showAllPlants() {
-    let selectedTreeName = ''
-    let selectedTreePrice = ''
-    let selectedTreeQuantity =''
     let res = await fetch(`https://openapi.programming-hero.com/api/plants`)
     let receivedData = await res.json()
     receivedData.plants.forEach((plantObj)=>{
@@ -156,39 +153,40 @@ async function showAllPlants() {
                 let existingItem = cartItems.find((e)=>{
                     return e.treeName === treeName
                 })
-                console.log(existingItem, cartItems)
+                
                 if(!existingItem){
-                    console.log(`existing item not found pushing ${treeName}`)
                     cartItems.push({
                         treeName : treeName,
                         treePrice : treePrice,
-                        treeQant : 0
+                        treeQant : 1
                     })
-                    console.log(cartItems)
+                    
                 } else {
                     existingItem.treeQant ++
                 }
-                // create a cart element
-            
-                
-                
-                let cartItem = document.createElement('div')
-                cartItem.classList.add('cart-item')
-                cartItem.setAttribute('value',treeCard.getAttribute('value'))
-                cartItem.innerHTML = `
-                    <div class="cart-item-left">
-                        <p class="cart-item-title">${treeName}</p>
-                        <p class="cart-item-price">${treePrice} x 1</p>
-                    </div>
-                    <div class="cross-icon">
-                        <img src="./assets/cross.svg" alt="" class="cross-icon">
-                    </div>
-                `
-                // append to cart container
-                cartContainer.appendChild(cartItem)
-                // update the price of the total 
-                const totalPriceShow = document.querySelector('.total-price')
-                totalPriceShow.innerHTML = `৳${parseInt(totalCart)}`
+
+                // create a cart element from that array
+                console.log(cartItems)
+                cartContainer.innerHTML = ''
+                cartItems.forEach((cartItemArr)=>{
+                    let cartItem = document.createElement('div')
+                    cartItem.classList.add('cart-item')
+                    cartItem.setAttribute('value',treeCard.getAttribute('value'))
+                    cartItem.innerHTML = `
+                        <div class="cart-item-left">
+                            <p class="cart-item-title">${cartItemArr.treeName}</p>
+                            <p class="cart-item-price">${cartItemArr.treePrice} x ${cartItemArr.treeQant}</p>
+                        </div>
+                        <div class="cross-icon">
+                            <img src="./assets/cross.svg" alt="" class="cross-icon">
+                        </div>
+                    `
+                    // append to cart container
+                    cartContainer.appendChild(cartItem)
+                    // update the price of the total 
+                    const totalPriceShow = document.querySelector('.total-price')
+                    totalPriceShow.innerHTML = `৳${parseInt(totalCart)}`
+                })
             }
         })
     })
