@@ -251,8 +251,24 @@ async function showTreesFromCategory() {
     let newCategoryContainer = document.querySelector('.categories-container')
     newCategoryContainer.querySelectorAll('.category-item').forEach((categoryBtn)=>{
         categoryBtn.addEventListener('click' , async (e)=>{
+
             treeCardContainer.innerHTML =''
             treeLoaderAnimation.style.display ='block'
+
+            newCategoryContainer.querySelectorAll('.category-item').forEach((catbtn)=>{
+                if(catbtn.classList.contains('active-cate')){
+                    catbtn.classList.remove('active-cate')
+                }
+            })
+            categoryBtn.classList.add('active-cate')
+
+            
+            if(e.target.classList.contains('all-cat')){
+                console.log('all cat clicked')
+                await showAllPlants()
+                return
+            }
+
             let tressOfCat = await getTreesOfCategory(e.target.getAttribute('value'))
             console.log(tressOfCat)
             tressOfCat.forEach((plantObj)=>{
