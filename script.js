@@ -49,11 +49,13 @@ async function getCategories() {
         //create a category item div
         let categoryItem = document.createElement('div')
         categoryItem.classList.add('category-item')
+        categoryItem.setAttribute('value' , categoryObj.id)
         categoryItem.innerHTML = categoryObj.category_name
 
         categoryContainer.appendChild(categoryItem)
     })
     loaderCategory.style.display = 'none'
+    await showTreesFromCategory()
 }
 getCategories()
 
@@ -201,7 +203,6 @@ function addItemToCartFromCard(treeCard) {
   renderCart();
 }
 
-
 async function showAllPlants() {
     let res = await fetch(`https://openapi.programming-hero.com/api/plants`)
     let receivedData = await res.json()
@@ -238,3 +239,53 @@ async function showAllPlants() {
     })
 }
 showAllPlants()
+
+// get cards from category
+async function getTreesOfCategory(categoryId) {
+    let res = await fetch(`https://openapi.programming-hero.com/api/category/${categoryId}`)
+    let output = await res.json()
+    return output.plants
+}
+
+async function showTreesFromCategory() {
+    let newCategoryContainer = document.querySelector('.categories-container')
+    newCategoryContainer.querySelectorAll('.category-item').forEach((categoryBtn)=>{
+        categoryBtn.addEventListener('click' , async (e)=>{
+            treeCardContainer.innerHTML =''
+            treeLoaderAnimation.style.display ='block'
+            let tressOfCat = await getTreesOfCategory(e.target.getAttribute('value'))
+            console.log(tressOfCat)
+            tressOfCat.forEach((plantObj)=>{
+            let treeCard = document.createElement('div')
+            treeCard.classList.add('tree-card')
+            treeCard.setAttribute('value', plantObj.id)
+            treeCard.innerHTML = `
+                <img loading="lazy" src="${plantObj.image}" alt="" class="card-image">
+                    <div class="card-details">
+                        <p class="tree-title">${plantObj.name}</p>
+                        <p class="tree-descrition">${plantObj.description}</p>
+                        <div class="tree-catp">
+                            <div class="tree-category">${plantObj.category}</div>
+                            <p class="tree-price">৳${plantObj.price}</p>
+                        </div>
+                        <button value="${plantObj.id}" class="add-card">Add to Cart</button>
+                    </div>
+            `
+            treeCardContainer.appendChild(treeCard)
+            })
+            treeLoaderAnimation.style.display = 'none'
+            let treeCards = document.querySelectorAll('.tree-card')
+
+            // add to cart functionality
+            treeCards.forEach((treeCard)=>{
+                treeCard.addEventListener('click' , async (e)=>{
+                    if(!e.target.classList.contains('add-card')){
+                        await openModal(treeCard.getAttribute('value'))
+                    } else {
+                        addItemToCartFromCard(treeCard)
+                    }
+                })
+            })
+        })
+    })
+}
