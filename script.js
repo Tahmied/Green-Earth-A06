@@ -89,7 +89,7 @@ async function openModal(plantId) {
     
     
     cardModal.innerHTML = `
-        <button class="modal-close-btn" id="closeModal" aria-label="Close">×</button>
+        <button class="modal-close-btn" id="closeModal" aria-label="Close">Close</button>
             <h2 id="treeTitle" class="tree-name-modal">${data.plants.name}</h2>
             <img src="${data.plants.image}" alt="Mango Mishti" class="modal-tree-img">
             <div class="tree-details-modal">

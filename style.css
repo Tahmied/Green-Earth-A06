@@ -1321,6 +1321,7 @@ body.no-scroll {
   gap: 0.75rem;
   color: #555;
   line-height: 1.5;
+  margin-bottom: 1.2rem;
 }
 
 .modal-detail {
@@ -1330,15 +1331,15 @@ body.no-scroll {
 
 .modal-close-btn {
   position: absolute;
-  top: 10px;
+  bottom: 10px;
   right: 10px;
   border: 0;
-  background: transparent;
+  background: #c7b5b57a;
   cursor: pointer;
-  padding: 6px;
-  font-size: 1.4rem;
-  color: #888;
-  border-radius: 6px;
+  padding: 6px 10px;
+  font-size: 14px;
+  color: #000000;
+  border-radius: 5px;
 }
 
 .modal-close-btn:hover,
